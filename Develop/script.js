@@ -61,6 +61,8 @@ function generatePassword() {
   console.log("charSetQtyArray: " + charSetQtyArray);
 
   // Add random characters of each character type into a string based on number of characters in charSetQtyArray
+  // the generated password would be sorted by the character set which will need to be shuffled afterwards.
+
   // initialize password to an empty string
   let password = "";
 
