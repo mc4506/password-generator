@@ -7,44 +7,118 @@ function writePassword() {
   var passwordText = document.querySelector("#password");
 
   passwordText.value = password;
-
 }
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
 
-
-// function call to set password variable
 function generatePassword() {
+  // Call function to get passwordLength
+  let passwordLength = getPasswordLength();
 
-  let isValid = false;
-  alert("Pleae enter the following criteria in order to generate your password.");
-  let passwordLength = prompt("Please enter number of characters for the password. Enter a number between 8 and 128");
+  // Initialize number of character sets selected to 0
+  let numberOfCharSetsSelected = 0;
 
-  do {
+  // Initialize an array of booleans with 4 false values. Using an array so I can call a for loop through the array below
+  let charSetBoolArray = [false, false, false, false];
+
+  // Loop until at least one character set is selected to generate the password
+  while (numberOfCharSetsSelected == 0) {
+    // Use confirm function to set boolean values for character types
+    charSetBoolArray[0] = confirm("Do you want lowercase characters in your password? (a b c ...)"); // lowercase index
+    charSetBoolArray[1] = confirm("Do you want uppercase characters in your password? (A B C ...)"); // uppercase index
+    charSetBoolArray[2] = confirm("Do you want numeric characters in your password? (0 1 2 ...)"); // numeric index
+    charSetBoolArray[3] = confirm("Do you want special characters in your password? (! # $ ...)"); // special index
+
+    // sum of values in the charSetBoolArray
+    numberOfCharSetsSelected = charSetBoolArray.reduce((a, b) => a + b, 0);
+    console.log(numberOfCharSetsSelected);
+
+    // If all 4 booleans are false and add upto 0, alert user and repeat loop
+    if (numberOfCharSetsSelected == 0) {
+      alert("At least one of the character types must be selected in order to generate your password. Try again.");
+    }
+  }
+
+  // Generate random number of characters for each selected character. With minimum 1 character and and maximum (passwordLength - numberOfCharSetsSelected)+1
+  // initialize passwordCharArray to track how many characters are in each character set based on the charSetBoolArray's true or false
+  let passwordCharArray = [0, 0, 0, 0];
+  let i = 0;
+
+  for (i = 0; i < passwordCharArray.length; i++) {
+    if (charSetBoolArray[i] === true && numberOfCharSetsSelected === 1) {
+      passwordCharArray[i] = passwordLength - numberOfCharSetsSelected + 1;
+    } else if (charSetBoolArray[i] === true) {
+      passwordCharArray[i] = Math.floor(Math.random() * (passwordLength - numberOfCharSetsSelected)) + 1;
+      passwordLength = passwordLength - passwordCharArray[i];
+      numberOfCharSetsSelected -= 1;
+    }
+  }
+  // console.log("charSetBoolArray: " + charSetBoolArray);
+  // console.log("passwordCharArray: " + passwordCharArray);
+
+  // Add random characters of each character type into a string based on number of characters in passwordCharArray
+  // initialize password to an empty string
+  let password = "";
+
+  //character set Array
+  const charSetArray = ["abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", "!\"#$%&'()*+,-./:;<=>?@[]^_`{|}~"];
+
+  let j = 0;
+
+  // loop through passwordCharArray (4 loops)
+  for (i = 0; i < passwordCharArray.length; i++) {
+    //loop through the randomly generated number of characters of each character set
+    for (j = 0; j < passwordCharArray[i]; j++) {
+      // randomly generate a character from the charSetArray
+      let char = charSetArray[i].charAt(getRandomInteger(0, charSetArray.length - 1));
+      // console.log(char);
+      password = password + char;
+      // console.log(password);
+    }
+  }
+  // Shuffle the string randomly to generate a randomized password that includes all the selected character types
+  var passwordShuffled = "";
+
+  let passwordArray = password.split("");
+  // console.log(passwordArray);
+
+  // loop
+  for (i = 0; i < password.length; i++) {
+    let shuffleChar = passwordArray.splice(getRandomInteger(0, passwordArray.length - (1 + i)), 1);
+    // console.log("shuffleChar: " + shuffleChar);
+    passwordShuffled += shuffleChar;
+    // console.log(passwordShuffled);
+  }
+}
+
+// Function to get password length
+function getPasswordLength() {
+  //initialize length boolean to false
+  let isLengthValid = false;
+  alert("Pleae follow the steps prompted to generate your password based on criteria selected.");
+  let passwordLength = prompt("Please enter number of characters for the password. Enter a length of at least 8 characters and no more than 128 characters.");
+
+  // Loop until isLengthValid=true
+  while (isLengthValid === false) {
     // If "cancel" button is clicked, break out of loop
     if (passwordLength === null) {
       break;
     }
-    // check if passwordLength is a valid integer between 8 and 128 (inclusive). If yes set isValid to true else prompt for a valid entry
-    if (Number.isInteger(passwordLength) && passwordLength >= 8 && passwordLength <= 128) {
-      isValid = true;
+    // Check if passwordLength is a valid integer between 8 and 128 (inclusive). If yes set isLengthValid to true else prompt for a valid entry
+    if (Number.isInteger(Number(passwordLength)) && passwordLength >= 8 && passwordLength <= 128) {
+      isLengthValid = true;
     } else {
-      isValid = false;
-      passwordLength = prompt("Your entry is not a valid number. Please enter a whole number between 8 and 128");
+      //Prompt again for valid response
+      passwordLength = prompt("Your entry is not a valid length. Please enter a whole number greater or equal to 8 and less than or equal to 128.");
     }
-  } while (isValid === false); 
-
-
-
-
+  }
+  return passwordLength;
 }
 
-// WHEN prompted for character types to include in the password
-// THEN I choose lowercase, uppercase, numeric, and/or special characters
-// WHEN I answer each prompt
-// THEN my input should be validated and at least one character type should be selected
-// WHEN all prompts are answered
-// THEN a password is generated that matches the selected criteria
-// WHEN the password is generated
-// THEN the password is either displayed in an alert or written to the page
+// Random Integer function with min and max parameter. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+function getRandomInteger(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
