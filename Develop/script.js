@@ -19,6 +19,12 @@ function generatePassword() {
   // Call function to get passwordLength
   let passwordLength = getPasswordLength();
 
+  // Check if User selects cancel from the prompt then terminate function and return null
+  if (passwordLength === null) {
+    return null;
+  }
+
+  // ****** Ask User to select character criteria for the password ****** //
   // Initialize number of character sets selected to 0
   let numberOfCharSetsSelected = 0;
 
@@ -43,7 +49,9 @@ function generatePassword() {
     }
   }
 
-  // Generate random number of characters for each selected character. With minimum 1 character and and maximum (passwordLength - numberOfCharSetsSelected)+1
+  // ****** Generate random number of characters for each selected character set ******//
+  // Minimum 1 character and and maximum(passwordLength - numberOfCharSetsSelected) + 1
+
   // initialize passwordCharArray to track how many characters are in each character set based on the charSetBoolArray's true or false
   let charSetQtyArray = [0, 0, 0, 0];
   let i = 0;
@@ -57,11 +65,11 @@ function generatePassword() {
       numberOfCharSetsSelected -= 1;
     }
   }
-  console.log("charSetBoolArray: " + charSetBoolArray);
-  console.log("charSetQtyArray: " + charSetQtyArray);
+  // console.log("charSetBoolArray: " + charSetBoolArray);
+  // console.log("charSetQtyArray: " + charSetQtyArray);
 
-  // Add random characters of each character type into a string based on number of characters in charSetQtyArray
-  // the generated password would be sorted by the character set which will need to be shuffled afterwards.
+  // *** Add random characters of each character set into a string based on number of characters in charSetQtyArray *** //
+  // The generated password is sorted by character set and need to be shuffled afterwards.
 
   // initialize password to an empty string
   let password = "";
@@ -79,7 +87,7 @@ function generatePassword() {
       let char = charSetArray[i].charAt(getRandomInteger(0, charSetArray[i].length - 1));
       // console.log(char);
       password = password + char;
-      console.log(password);
+      // console.log(password);
     }
   }
 
