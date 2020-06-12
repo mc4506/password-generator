@@ -12,6 +12,9 @@ function writePassword() {
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
 
+// ***************** //
+// Generate Password //
+// ***************** //
 function generatePassword() {
   // Call function to get passwordLength
   let passwordLength = getPasswordLength();
@@ -32,7 +35,7 @@ function generatePassword() {
 
     // sum of values in the charSetBoolArray
     numberOfCharSetsSelected = charSetBoolArray.reduce((a, b) => a + b, 0);
-    console.log(numberOfCharSetsSelected);
+    // console.log(numberOfCharSetsSelected);
 
     // If all 4 booleans are false and add upto 0, alert user and repeat loop
     if (numberOfCharSetsSelected == 0) {
@@ -42,22 +45,22 @@ function generatePassword() {
 
   // Generate random number of characters for each selected character. With minimum 1 character and and maximum (passwordLength - numberOfCharSetsSelected)+1
   // initialize passwordCharArray to track how many characters are in each character set based on the charSetBoolArray's true or false
-  let passwordCharArray = [0, 0, 0, 0];
+  let charSetQtyArray = [0, 0, 0, 0];
   let i = 0;
 
-  for (i = 0; i < passwordCharArray.length; i++) {
+  for (i = 0; i < charSetQtyArray.length; i++) {
     if (charSetBoolArray[i] === true && numberOfCharSetsSelected === 1) {
-      passwordCharArray[i] = passwordLength - numberOfCharSetsSelected + 1;
+      charSetQtyArray[i] = passwordLength - numberOfCharSetsSelected + 1;
     } else if (charSetBoolArray[i] === true) {
-      passwordCharArray[i] = Math.floor(Math.random() * (passwordLength - numberOfCharSetsSelected)) + 1;
-      passwordLength = passwordLength - passwordCharArray[i];
+      charSetQtyArray[i] = Math.floor(Math.random() * (passwordLength - numberOfCharSetsSelected)) + 1;
+      passwordLength = passwordLength - charSetQtyArray[i];
       numberOfCharSetsSelected -= 1;
     }
   }
-  // console.log("charSetBoolArray: " + charSetBoolArray);
-  // console.log("passwordCharArray: " + passwordCharArray);
+  console.log("charSetBoolArray: " + charSetBoolArray);
+  console.log("charSetQtyArray: " + charSetQtyArray);
 
-  // Add random characters of each character type into a string based on number of characters in passwordCharArray
+  // Add random characters of each character type into a string based on number of characters in charSetQtyArray
   // initialize password to an empty string
   let password = "";
 
@@ -66,37 +69,45 @@ function generatePassword() {
 
   let j = 0;
 
-  // loop through passwordCharArray (4 loops)
-  for (i = 0; i < passwordCharArray.length; i++) {
-    //loop through the randomly generated number of characters of each character set
-    for (j = 0; j < passwordCharArray[i]; j++) {
-      // randomly generate a character from the charSetArray
-      let char = charSetArray[i].charAt(getRandomInteger(0, charSetArray.length - 1));
+  // loop through charSetQtyArray (4 times)
+  for (i = 0; i < charSetQtyArray.length; i++) {
+    //loop through number of characters for each character set
+    for (j = 0; j < charSetQtyArray[i]; j++) {
+      // randomly generate a character from the ith index of charSetArray
+      let char = charSetArray[i].charAt(getRandomInteger(0, charSetArray[i].length - 1));
       // console.log(char);
       password = password + char;
-      // console.log(password);
+      console.log(password);
     }
   }
-  // Shuffle the string randomly to generate a randomized password that includes all the selected character types
+
+  // ****** Shuffle the password ******** //
+  // initialize a shuffled password string
   var passwordShuffled = "";
 
+  // split password into an array to be used in a for loop
   let passwordArray = password.split("");
   // console.log(passwordArray);
 
-  // loop
+  // loop through the password and using splice method to assign a shuffled character to the passwordShuffled string
   for (i = 0; i < password.length; i++) {
+    // decrement the passwordArray length for each character that gets spliced
     let shuffleChar = passwordArray.splice(getRandomInteger(0, passwordArray.length - (1 + i)), 1);
     // console.log("shuffleChar: " + shuffleChar);
     passwordShuffled += shuffleChar;
     // console.log(passwordShuffled);
   }
+
+  return passwordShuffled;
 }
 
-// Function to get password length
+// ******************************* //
+// Function to get password length //
+// ******************************* //
 function getPasswordLength() {
   //initialize length boolean to false
   let isLengthValid = false;
-  alert("Pleae follow the steps prompted to generate your password based on criteria selected.");
+  alert("Please follow the steps prompted to generate your password based on criteria selected.");
   let passwordLength = prompt("Please enter number of characters for the password. Enter a length of at least 8 characters and no more than 128 characters.");
 
   // Loop until isLengthValid=true
@@ -116,7 +127,9 @@ function getPasswordLength() {
   return passwordLength;
 }
 
+// *************************************************** //
 // Random Integer function with min and max parameter. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+// *************************************************** //
 function getRandomInteger(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
