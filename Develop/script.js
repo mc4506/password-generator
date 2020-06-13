@@ -16,6 +16,9 @@ generateBtn.addEventListener("click", writePassword);
 // Generate Password //
 // ***************** //
 function generatePassword() {
+  // Show an alert to start password generation
+  alert("Please follow the steps prompted to generate your password based on criteria selected.");
+
   // Call function to get passwordLength
   let passwordLength = getPasswordLength();
 
@@ -101,13 +104,12 @@ function generatePassword() {
 
   // loop through the password and using splice method to assign a shuffled character to the passwordShuffled string
   for (i = 0; i < password.length; i++) {
-    // decrement the passwordArray length for each character that gets spliced
+    // decrement the passwordArray length for each character that gets spliced/removed
     let shuffleChar = passwordArray.splice(getRandomInteger(0, passwordArray.length - (1 + i)), 1);
     // console.log("shuffleChar: " + shuffleChar);
     passwordShuffled += shuffleChar;
     // console.log(passwordShuffled);
   }
-
   return passwordShuffled;
 }
 
@@ -117,7 +119,6 @@ function generatePassword() {
 function getPasswordLength() {
   //initialize length boolean to false
   let isLengthValid = false;
-  alert("Please follow the steps prompted to generate your password based on criteria selected.");
   let passwordLength = prompt("Please enter number of characters for the password. Enter a length of at least 8 characters and no more than 128 characters.");
 
   // Loop until isLengthValid=true
