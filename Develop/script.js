@@ -12,9 +12,7 @@ function writePassword() {
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
 
-// ***************** //
-// Generate Password //
-// ***************** //
+// FUNCTION TO GENERATE PASSWORD WHEN GENERATE PASSWORD BUTTON IS CLICKED
 function generatePassword() {
   // Show an alert to start password generation
   alert("Please follow the steps prompted to generate your password based on criteria selected.");
@@ -94,28 +92,13 @@ function generatePassword() {
     }
   }
 
-  // ****** Shuffle the password ******** //
-  // initialize a shuffled password string
-  var passwordShuffled = "";
-
-  // split password into an array to be used in a for loop
-  let passwordArray = password.split("");
-  // console.log(passwordArray);
-
-  // loop through the password and using splice method to assign a shuffled character to the passwordShuffled string
-  for (i = 0; i < password.length; i++) {
-    // decrement the passwordArray length for each character that gets spliced/removed
-    let shuffleChar = passwordArray.splice(getRandomInteger(0, passwordArray.length - (1 + i)), 1);
-    // console.log("shuffleChar: " + shuffleChar);
-    passwordShuffled += shuffleChar;
-    // console.log(passwordShuffled);
-  }
-  return passwordShuffled;
+  // ***** Shuffle the password generated *****
+  let shuffledPassword = shuffleString(password);
+  return shuffledPassword;
 }
 
-// ******************************* //
-// Function to get password length //
-// ******************************* //
+
+// FUNCTION TO GET PASSWORD LENGTH
 function getPasswordLength() {
   //initialize length boolean to false
   let isLengthValid = false;
@@ -132,15 +115,32 @@ function getPasswordLength() {
       isLengthValid = true;
     } else {
       //Prompt again for valid response
-      passwordLength = prompt("Your entry is not a valid length. Please enter a whole number greater or equal to 8 and less than or equal to 128.");
+      passwordLength = prompt("Please enter a whole number greater or equal to 8 and less than or equal to 128. Try Again.");
     }
   }
   return passwordLength;
 }
 
-// *************************************************** //
-// Random Integer function with min and max parameter. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-// *************************************************** //
+// FUNCTION TO SHUFFLE A STRING
+function shuffleString (string) {
+  let shuffledString = "";
+
+  // split string into an array to be used in a for loop
+  let stringArray = string.split("");
+  // console.log(stringArray);
+
+  // loop through the string and using splice method to assign a shuffled character to the shuffledString
+  for (i = 0; i < string.length; i++) {
+    // decrement the stringArray length for each character that gets spliced/removed
+    let shuffleChar = stringArray.splice(getRandomInteger(0, stringArray.length - (1 + i)), 1);
+    // console.log("shuffleChar: " + shuffleChar);
+    shuffledString += shuffleChar;
+    // console.log(shuffledString);
+  }
+  return shuffledString;
+}
+
+// RANDOM INTEGER FUNCTION https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomInteger(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
